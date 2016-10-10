@@ -46,10 +46,11 @@ class ApiView
             $body = $this->buildOutput($content);
         }
 
-        http_response_code($this->responseCode);
         foreach ($this->headers as $key => $value) {
             header($key . ': ' . $value, true);
         }
+
+        http_response_code($this->responseCode);
 
         echo $body;
 
