@@ -553,7 +553,9 @@ class EventMapper extends ApiMapper
                     . ' inner join tags t on t.ID = te.tag_id'
                     . ' where te.event_id = :event_id';
         $tag_stmt = $this->_db->prepare($tag_sql);
-        $tag_stmt->execute(array("event_id" => $event_id));
+        if (! $tag_stmt->execute(array("event_id" => $event_id))) {
+            return [];
+        }
         $tags   = $tag_stmt->fetchAll(PDO::FETCH_ASSOC);
         $retval = array();
         if (is_array($tags)) {
@@ -1168,7 +1170,9 @@ class EventMapper extends ApiMapper
                     . ' from event_images i '
                     . ' where i.event_id = :event_id';
         $image_stmt = $this->_db->prepare($image_sql);
-        $image_stmt->execute(array("event_id" => $event_id));
+        if (! $image_stmt->execute(array("event_id" => $event_id))) {
+            return [];
+        }
         $images  = $image_stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // add named keys so we can easily refer to these results

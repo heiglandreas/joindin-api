@@ -26,15 +26,11 @@ abstract class ApiController
     public function getVerbosity($request)
     {
         // verbosity
-        if (isset($request->parameters['verbose'])
-            && $request->parameters['verbose'] == 'yes'
-        ) {
-            $verbose = true;
-        } else {
-            $verbose = false;
+        if ($request->getParameter('verbose') !== 'yes') {
+            return false;
         }
 
-        return $verbose;
+        return true;
     }
 
     public function getStart($request)

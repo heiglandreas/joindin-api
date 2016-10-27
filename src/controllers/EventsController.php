@@ -146,11 +146,12 @@ class EventsController extends ApiController
         return $list;
     }
 
-    public function postAction($request, $db)
+    public function postAction(Request $request, $db)
     {
         if (! isset($request->user_id)) {
             throw new Exception("You must be logged in to create data", 401);
         }
+
         if (isset($request->url_elements[4])) {
             switch ($request->url_elements[4]) {
                 case 'attending':
@@ -353,12 +354,13 @@ class EventsController extends ApiController
                     $emailService = new EventSubmissionEmailService($this->config, $recipients, $event, $count);
                     $emailService->sendEmail();
                 }
-                exit;
+
+                return null;
             }
         }
     }
 
-    public function deleteAction($request, $db)
+    public function deleteAction(Request $request, $db)
     {
         if (! isset($request->user_id)) {
             throw new Exception("You must be logged in to delete data", 401);
