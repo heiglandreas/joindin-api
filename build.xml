@@ -21,6 +21,22 @@
   <exec command="phpunit -c tests/phpunit.xml" logoutput="true" checkreturn="true" />
  </target>
 
+    <target name="diff">
+        <exec command="git diff upstream/master" output="build/logs/php.patch" dir="tests"/>
+    </target>
+
+    <target name="patchcoverage" depends="diff,phpunit">
+        <resolvepath propertyName="absbasedir" file="${basedir}"/>
+        <exec executable="phpcov" dir="tests" logoutput="true" checkreturn="true" >
+            <arg value="patch-coverage"/>
+            <arg value="../build/logs/php.cov"/>
+            <arg value="--patch"/>
+            <arg value="../build/logs/php.patch"/>
+            <arg value="--path-prefix"/>
+            <arg value="${absbasedir}"/>
+        </exec>
+    </target>
+
  <target name="buildTasks" description="Run the phpmd, phpcs, phploc and lint tasks.">
    <phingcall target="phpcs"/>
    <phingcall target="phplint"/>

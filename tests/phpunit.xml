@@ -18,10 +18,11 @@
              lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="../build/logs/clover.xml"/>
         <log type="junit" target="../build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="coverage-php" target="../build/logs/php.cov"/>
     </logging>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">../src/controllers</directory>
             <directory suffix=".php">../src/inc</directory>
             <directory suffix=".php">../src/models</directory>
