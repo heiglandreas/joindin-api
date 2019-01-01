@@ -3,7 +3,7 @@
 /**
  * Object that represents a talk
  */
-class TalkModel extends BaseModel
+class ProposalModel extends BaseModel
 {
     /**
      * Default fields in the output view
@@ -19,14 +19,9 @@ class TalkModel extends BaseModel
             'url_friendly_talk_title' => 'url_friendly_talk_title',
             'talk_description'        => 'talk_desc',
             'type'                    => 'talk_type',
-            'start_date'              => 'date_given',
             'duration'                => 'duration',
             'stub'                    => 'stub',
-            'average_rating'          => 'avg_rating',
-            'comments_enabled'        => 'comments_enabled',
-            'comment_count'           => 'comment_count',
-            'starred'                 => 'starred',
-            'starred_count'           => 'starred_count',
+            'language'                => 'language'
         );
     }
 
@@ -39,14 +34,7 @@ class TalkModel extends BaseModel
      */
     public function getVerboseFields()
     {
-        $fields = $this->getDefaultFields();
-
-        $fields['slides_link'] = 'slides_link';
-        $fields['talk_media']  = 'talk_media';
-        $fields['language']    = 'lang_name';
-        $fields['user_rating'] = 'user_rating';
-
-        return $fields;
+        return $this->getDefaultFields();
     }
 
     /**
@@ -61,7 +49,6 @@ class TalkModel extends BaseModel
     {
         return [
             'speakers' => 'speakers',
-            'tracks'   => 'tracks',
         ];
     }
 
@@ -81,29 +68,12 @@ class TalkModel extends BaseModel
         $base    = $request->base;
         $version = $request->version;
 
-        $item['uri']                  = $base . '/' . $version . '/talks/' . $this->ID;
-        $item['verbose_uri']          = $base . '/' . $version . '/talks/' . $this->ID . '?verbose=yes';
-        $item['website_uri']          = $this->getWebsiteUrl($request->getConfigValue('website_url'));
-        $item['starred_uri']          = $base . '/' . $version . '/talks/' . $this->ID . '/starred';
-        $item['tracks_uri']           = $base . '/' . $version . '/talks/' . $this->ID . '/tracks';
-        $item['comments_uri']         = $base . '/' . $version . '/talks/' . $this->ID . '/comments';
-        $item['verbose_comments_uri'] = $base . '/' . $version . '/talks/' . $this->ID
-                                        . '/comments?verbose=yes';
+        $item['uri']                  = $base . '/' . $version . '/proposal/' . $this->ID;
+        $item['verbose_uri']          = $base . '/' . $version . '/proposal/' . $this->ID . '?verbose=yes';
+        $item['website_uri']          = $request->getConfigValue('website_url') . '/proposal/' . $this->stub;
         $item['event_uri']            = $base . '/' . $version . '/events/' . $this->event_id;
-        $item['speakers_uri']         = $base . '/' . $version . '/talks/' . $this->ID . '/speakers';
+        $item['speakers_uri']         = $base . '/' . $version . '/proposal/' . $this->ID . '/speakers';
 
         return $item;
-    }
-
-    /**
-     * Get the URL on the website of this talk
-     *
-     * @param string $website_url The URL to the main website (e.g. http://joind.in or http://test.joind.in)
-     *
-     * @return string The link to the talk on the web (e.g. http://web2.dev.joind.in/talk/ed89b)
-     **/
-    public function getWebsiteUrl($website_url)
-    {
-        return $website_url . "/talk/" . $this->stub;
     }
 }

@@ -58,7 +58,7 @@ class ActionControllerRoute extends Route
         if (! is_callable($controller)) {
             throw new RuntimeException('Controller not callable', 500);
         }
-        
+
         return $controller();
     }
 }
