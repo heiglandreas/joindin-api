@@ -67,7 +67,7 @@ class VersionedRouter extends BaseRouter
                 $params = array_diff_key($matches, array_flip($exclude));
 
                 if (isset($rule['actioncontroller'])) {
-                    return new ActionControllerRoute($rule['actioncontroller'], $params);
+                    return new \Joindin\Api\Routers\ActionControllerRoute($rule['actioncontroller'], $params);
                 }
 
                 return new Route($rule['controller'], $rule['action'], $params);

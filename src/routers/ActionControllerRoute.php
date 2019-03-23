@@ -1,8 +1,14 @@
 <?php
 
-/**
- * Represents a Controller and action to dispatch a Request to.
- */
+declare(strict_types = 1);
+
+namespace Joindin\Api\Routers;
+
+use Joindin\Api\Inc\QueueRequestHandler;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
+
 class ActionControllerRoute extends Route
 {
     /**
@@ -47,18 +53,25 @@ class ActionControllerRoute extends Route
      *
      * @return mixed
      */
-    public function dispatch(Request $request, $db, $config)
+    public function dispatch(Request $request, $db, $config) : ResponseInterface
     {
+        $request = ($this->requestModifier)($request);
         $className = $this->getController();
         if (! class_exists($className)) {
             throw new RuntimeException('Unknown controller ' . $request->url_elements[2], 400);
         }
 
-        $controller = new $className($config, $request, $db);
-        if (! is_callable($controller)) {
+        $controller = new $className($config, $db);
+        if (! $controller instanceof RequestHandlerInterface) {
             throw new RuntimeException('Controller not callable', 500);
         }
 
-        return $controller();
+        $queue = new QueueRequestHandler($controller);
+
+        // Here we can later add adding middleware
+
+        $response = $queue->handle($request);
+
+        return $response;
     }
 }
